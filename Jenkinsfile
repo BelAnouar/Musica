@@ -18,12 +18,7 @@ pipeline {
     }
 
     stages {
-        stage('Checkout') {
-            steps {
-                   git scm
 
-            }
-        }
 
         stage('Build') {
             steps {
