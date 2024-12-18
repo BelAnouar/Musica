@@ -20,10 +20,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                checkout scm: [
-                    $class: 'GitSCM',
-                    branches: [[name: params.GITHUB_SHA ?: '*/master']],
-                    userRemoteConfigs: [[url: ' https://github.com/BelAnouar/Musica.git']]
+                   git scm
                 ]
             }
         }
