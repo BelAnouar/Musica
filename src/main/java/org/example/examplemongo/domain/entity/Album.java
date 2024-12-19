@@ -19,7 +19,7 @@ import java.util.List;
 @Document
 public class Album {
     @Id
-    private Long Id;
+    private String id;
     private String title;
     private String artist;
     private Integer year;

@@ -12,9 +12,9 @@ import lombok.NoArgsConstructor;
 @Builder
 public class ChansonsResponse {
 
-    private Long chansonsId;
+    private String id;
     private String title;
-    private String artist;
-    private Integer year;
+    private Integer duration;
+    private Integer trackNumber;
 
 }

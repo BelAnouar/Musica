@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.example.examplemongo.domain.entity.Album;
 import org.example.examplemongo.dto.request.AlbumRequest;
 import org.example.examplemongo.dto.response.AlbumResponse;
+import org.example.examplemongo.exception.EntityNotFoundException;
 import org.example.examplemongo.mapper.AlbumMapper;
 import org.example.examplemongo.repository.AlbumRepository;
 import org.example.examplemongo.service.AlbumService;
@@ -31,8 +32,11 @@ public class AlbumServiceImpl implements AlbumService {
     }
 
     @Override
-    public AlbumResponse updateAlbum(AlbumRequest albumRequest, Long id) {
-        Album existsAlbum= albumRepository.findById(id).orElse(null);
+    public AlbumResponse updateAlbum(AlbumRequest albumRequest, String id) {
+
+        Album existsAlbum= albumRepository.findAlbumById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Album not found with id: " + id));
+
         albumMapper.updateEntity(existsAlbum,albumRequest);
         Album savedAlbum= albumRepository.save(existsAlbum);
         return albumMapper.toResponse(savedAlbum);
@@ -44,12 +48,20 @@ public class AlbumServiceImpl implements AlbumService {
     }
 
     @Override
-    public AlbumResponse getAlbumsByTitle(String title, Pageable pageable) {
-        return null;
-    }
+    public Page<AlbumResponse> getAlbumsByTitle(String title, Pageable pageable) {
+        log.info("Fetching albums with title containing: {}", title);
+        Page<Album> albums = albumRepository.findByTitleContainingIgnoreCase(title, pageable);
 
+        if (albums.isEmpty()) {
+            log.warn("No albums found with title containing: {}", title);
+        } else {
+            log.info("Found {} albums with title containing: {}", albums.getTotalElements(), title);
+        }
+
+        return albums.map(albumMapper::toResponse);
+    }
     @Override
-    public void deleteAlbum(Long id) {
+    public void deleteAlbum(String id) {
         albumRepository.deleteById(id);
     }
 }

@@ -3,6 +3,7 @@ package org.example.examplemongo.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.example.examplemongo.config.JwtTokenUtil;
 import org.example.examplemongo.dto.request.LoginRequest;
 import org.example.examplemongo.dto.request.UserResquest;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
@@ -40,8 +42,8 @@ public class UserController {
 
 
     @PostMapping("/login")
-
     public ResponseEntity<?> login(@Valid @RequestBody LoginRequest loginDTO) {
+
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginDTO.getLogin(), loginDTO.getPassword())
         );

@@ -9,9 +9,8 @@ public interface AlbumService {
 
 
     AlbumResponse createAlbum(AlbumRequest albumRequest);
-    AlbumResponse updateAlbum(AlbumRequest albumRequest,Long id);
+    AlbumResponse updateAlbum(AlbumRequest albumRequest,String id);
     Page<AlbumResponse> getAlbums(Pageable pageable);
-    AlbumResponse getAlbumsByTitle(String title, Pageable pageable);
-    void deleteAlbum(Long id);
-
+    void deleteAlbum(String id);
+    Page<AlbumResponse> getAlbumsByTitle(String title, Pageable pageable);
 }

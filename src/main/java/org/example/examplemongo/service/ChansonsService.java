@@ -10,6 +10,6 @@ public interface ChansonsService {
     ChansonsResponse createChansons(ChansonsRequest chansonsRequest);
     Page<ChansonsResponse> getChansons(Pageable pageable);
     ChansonsResponse getChansonsByTitle(String chansonsTitle);
-    ChansonsResponse updateChansons(ChansonsRequest chansonsRequest, Long chansonsId);
-    void deleteChansons(Long chansonsId);
+    ChansonsResponse updateChansons(ChansonsRequest chansonsRequest, String chansonsId);
+    void deleteChansons(String chansonsId);
 }

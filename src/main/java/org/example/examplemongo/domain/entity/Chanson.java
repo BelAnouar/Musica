@@ -18,7 +18,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Chanson {
 
     @Id
-    private Long id;
+    private String id;
     private String title;
     private Integer duration;
     private Integer trackNumber;

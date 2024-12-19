@@ -11,6 +11,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,14 +36,26 @@ public class AlbumConteroller {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<AlbumResponse> updateAlbum(@Validated @RequestBody AlbumRequest albumRequest, @PathVariable long id){
+    public ResponseEntity<AlbumResponse> updateAlbum(@Validated @RequestBody AlbumRequest albumRequest, @PathVariable String id){
         return ResponseEntity.status(HttpStatus.OK).body(albumService.updateAlbum(albumRequest, id));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteAlbum(@PathVariable long id){
+    public ResponseEntity<Void> deleteAlbum(@PathVariable String id){
         albumService.deleteAlbum(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/search")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    public ResponseEntity<Page<AlbumResponse>> getAlbumsByTitle(
+            @RequestParam String title,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        log.info("Received request to search albums with title containing: {}", title);
+        Pageable pageable = PageRequest.of(page, size);
+        Page<AlbumResponse> albums = albumService.getAlbumsByTitle(title, pageable);
+        return ResponseEntity.ok(albums);
     }
 
 

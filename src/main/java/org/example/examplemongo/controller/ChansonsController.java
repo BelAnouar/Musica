@@ -12,6 +12,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,23 +27,34 @@ public class ChansonsController {
 
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<Page<ChansonsResponse>> getAllChansons(@RequestParam(defaultValue = "0") int pageNo,@RequestParam(defaultValue = "10") int pageSize){
         Pageable pageable= PageRequest.of(pageNo,pageSize);
         return ResponseEntity.ok(chansonsService.getChansons(pageable));
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public  ResponseEntity<ChansonsResponse> createChansons(@RequestBody @Valid ChansonsRequest chansonsRequest){
         return ResponseEntity.status(HttpStatus.CREATED).body(chansonsService.createChansons(chansonsRequest));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ChansonsResponse> updateChansons(@PathVariable Long id,@RequestBody @Valid ChansonsRequest chansonsRequest){
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ChansonsResponse> updateChansons(@PathVariable String id,@RequestBody @Valid ChansonsRequest chansonsRequest){
         return ResponseEntity.ok(chansonsService.updateChansons(chansonsRequest,id));
     }
 
+    @GetMapping("/title")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    public ResponseEntity<ChansonsResponse> getChansonByTitle(
+            @RequestParam String title) {
+        return ResponseEntity.ok(chansonsService.getChansonsByTitle(title));
+    }
+
     @DeleteMapping("{id}")
-    public ResponseEntity<ChansonsResponse> deleteChansons(@PathVariable Long id){
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ChansonsResponse> deleteChansons(@PathVariable String id){
         chansonsService.deleteChansons(id);
         return ResponseEntity.noContent().build();
     }
