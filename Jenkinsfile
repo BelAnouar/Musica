@@ -4,7 +4,7 @@ pipeline {
     tools {
         maven 'Maven'
         jdk 'JDK'
-
+       dockerTool 'Docker'
     }
 
     parameters {
@@ -14,7 +14,7 @@ pipeline {
 
     environment {
         DOCKER_REGISTRY = 'docker.io/anwarbel'
-        APP_NAME = 'bro-app'
+        APP_NAME = 'Mongo-app'
         DOCKER_CREDENTIALS_ID = 'docker-hub-credentials'
     }
 

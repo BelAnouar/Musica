@@ -10,6 +10,8 @@ import org.example.examplemongo.dto.request.UserResquest;
 import org.example.examplemongo.dto.response.UserResponse;
 import org.example.examplemongo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -22,6 +24,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -61,5 +64,8 @@ public class UserController {
         userService.register(registerDTO);
         return ResponseEntity.ok(Collections.singletonMap("message", "User registered successfully"));
     }
+
+
+
 
 }
