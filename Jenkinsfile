@@ -14,7 +14,7 @@ pipeline {
 
     environment {
         DOCKER_REGISTRY = 'docker.io/anwarbel'
-        APP_NAME = 'mongo-app'
+        APP_NAME = 'mongo'
         DOCKER_CREDENTIALS_ID = 'docker-hub-credentials'
     }
 

@@ -11,8 +11,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class AlbumRequest {
-
     private String title;
     private String artist;
     private Integer year;
+    private String userid;
 }

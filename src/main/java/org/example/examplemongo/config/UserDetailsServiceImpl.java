@@ -19,18 +19,28 @@ import java.util.stream.Collectors;
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     private final UserRepository userRepository;
+    private static final ThreadLocal<String> userIdHolder = new ThreadLocal<>();
+
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByLogin(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
 
-        log.info("User roles: {}", String.join(",", user.getRoles()));
+        userIdHolder.set(user.getId());
+        log.info("User roles: {}", String.join(",", user.getId()));
 
         List<SimpleGrantedAuthority> authorities = user.getRoles().stream()
                 .map(role -> new SimpleGrantedAuthority("ROLE_" + role.toUpperCase()))
                 .collect(Collectors.toList());
 
         return new org.springframework.security.core.userdetails.User(user.getLogin(), user.getPassword(), authorities);
+    }
+    public static String getCurrentUserId() {
+        return userIdHolder.get();
+    }
+
+    public static void clear() {
+        userIdHolder.remove();
     }
 }
